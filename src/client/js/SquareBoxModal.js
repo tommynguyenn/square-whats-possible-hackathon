@@ -9,10 +9,49 @@ export default function SquareBoxModal() {
     }
     call();
 	return (
-		<div className="box">
-            <h2>Testing Styling</h2>
-            <p>Randomness</p>
+        <div className="boxWrapper">
+            <div className="box">
+                <h2>Testing Styling</h2>
+                <p>Randomness</p>
+            </div>
+
+            <div className="box">
+                <h2>Testing Styling</h2>
+                <p>Randomness</p>
+            </div>
+
+            <div className="box">
+                <h2>Testing Styling</h2>
+                <p>Randomness</p>
+            </div>
+
+            <div className="box">
+                <h2>Testing Styling</h2>
+                <p>Randomness</p>
+            </div>
+
+            <div className="box">
+                <h2>Testing Styling</h2>
+                <p>Randomness</p>
+            </div>
+
+            <div className="box">
+                <h2>Testing Styling</h2>
+                <p>Randomness</p>
+            </div>
+
+            <div className="box">
+                <h2>Testing Styling</h2>
+                <p>Randomness</p>
+            </div>
+
+            <div className="box">
+                <h2>Testing Styling</h2>
+                <p>Randomness</p>
+            </div>
+
         </div>
-  
+		
+    
 	);
 }

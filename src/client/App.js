@@ -4,6 +4,7 @@ import Onboarding from './js/Onboarding';
 import SquareBoxModal from './js/SquareBoxModal';
 import NavBar from "./js/Navbar/NavBar"
 import './css/app.css';
+import GiftCardModal from "./js/GiftCardModal";
 
 export default function App() {
 	return (
@@ -12,15 +13,10 @@ export default function App() {
 		<Router>
 			<Route path="/">
 					<Onboarding />
-				<SquareBoxModal/>
-				<br/>
-				<br/>
-				<SquareBoxModal/>
-				<br/>
-				<br/>
-				<SquareBoxModal/>
-			</Route>
-		</Router>
+					<GiftCardModal/>
+					<SquareBoxModal/>
+				</Route>
+			</Router>
 		</div>
 	);
 }

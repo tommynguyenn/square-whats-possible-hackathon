@@ -8,8 +8,8 @@ export default function Onboarding() {
     }
     call();
 	return (
-		<div>
-            hello
-        </div>
+		
+           <h1>Square: Build What's POS_sible </h1>
+  
 	);
 }

@@ -1,0 +1,15 @@
+h1{
+    text-align: center;
+}
+.app{
+    background-color:#079FAE;
+}
+.box {
+    width:300px;
+    height:300px;
+    border: 2px solid black;
+    display:flex;
+    flex-direction:column;
+    text-align:center;
+
+}

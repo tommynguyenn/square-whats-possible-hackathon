@@ -2,25 +2,21 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Onboarding from './js/Onboarding';
 import SquareBoxModal from './js/SquareBoxModal';
-import NavBar from "./js/NavBar"
+import NavBar from "./js/NavBar";
 import './css/app.css';
+import GiftCardModal from "./js/GiftCardModal";
 
 export default function App() {
 	return (
 		<div className="app">
-		<NavBar/>
-		<Router>
-			<Route path="/">
+			<NavBar/>
+			<Router>
+				<Route path="/">
 					<Onboarding />
-				<SquareBoxModal/>
-				<br/>
-				<br/>
-				<SquareBoxModal/>
-				<br/>
-				<br/>
-				<SquareBoxModal/>
-			</Route>
-		</Router>
+					<GiftCardModal/>
+					<SquareBoxModal/>
+				</Route>
+			</Router>
 		</div>
 	);
 }

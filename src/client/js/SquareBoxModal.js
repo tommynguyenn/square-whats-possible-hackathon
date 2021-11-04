@@ -1,15 +1,18 @@
 import React from 'react';
 import axios from 'axios';
 
-export default function Onboarding() {
+
+export default function SquareBoxModal() {
     const call = async () => {
         const response = await axios('/api/v1/square/');
         console.log(response);
     }
     call();
 	return (
-		
-           <h1>Square: Build What's POS_sible </h1>
+		<div className="box">
+            <h2>Testing Styling</h2>
+            <p>Randomness</p>
+        </div>
   
 	);
 }

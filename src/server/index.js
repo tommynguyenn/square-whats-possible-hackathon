@@ -1,13 +1,15 @@
 require('dotenv').config();
 
+const Firebase = require('./utils/firebase');
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
 const path = require('path');
 
 const app = express();
+Firebase.init();
 
-app.use(express.static(path.join(__dirname, '../../dist')));
+app.use(express.static(path.join(__dirname, '../../public')));
 app.use(cors());
 app.use(express.urlencoded({
 	extended: true
@@ -25,12 +27,14 @@ app.use(session({
 
 // Required routes.
 const squareRoutes = require('./api/v1/square');
+const authRoutes = require('./api/v1/auth');
 
 // Apply required routes to servers
 app.use('/api/v1/square', squareRoutes);
+app.use('/api/v1/auth', authRoutes);
 
 app.get('/*', (req, res) => {
-	res.sendFile(path.join(__dirname, '../../dist/index.html'));
+	res.sendFile(path.join(__dirname, '../../public/index.html'));
 });
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}`));

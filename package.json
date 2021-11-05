@@ -13,6 +13,7 @@
   "author": "Andy Cheng, Zack Hoang, Tommy Nguyen",
   "license": "ISC",
   "dependencies": {
+    "@emotion/styled": "^11.3.0",
     "@mui/material": "^5.0.6",
     "axios": "^0.24.0",
     "babel-polyfill": "^6.26.0",
@@ -21,6 +22,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.16.3",
     "express-session": "^1.17.2",
+    "firebase": "^9.3.0",
     "mongoose": "^6.0.12",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",

@@ -1,6 +1,7 @@
 const router = require( 'express' ).Router();
 const { Client, Environment } = require('square');
 const { v4: uuidv4 } = require('uuid');
+const { STATUS_CODES } = require('../../utils/constants');
 
 const client = new Client({
   environment: Environment.Sandbox,
@@ -61,16 +62,20 @@ const searchUser = async ( customerEmail ) => {
 }
 
 // Gets all gift cards linked to a specific email.
-router.get('/giftCards', async (req, res) => {
-	console.log('/api/square/giftCards called');
-	req.body.customerEmail = 'tnguuyen@outlook.com';
+router.get('/giftCards/:customerEmail', async (req, res) => {
+	console.log('/api/v1/square/giftCards called');
 
-	const userSearch = await searchUser(req.body.customerEmail);
-	if ( !userSearch.length ) return res.status(404).json('Current user does not exist in Square.');
+	const userSearch = await searchUser(req.params.customerEmail);
+	if ( !userSearch.length ) return res.json({
+		status: STATUS_CODES.FAIL,
+		data: 'Current user does not exist in Square.'
+	});
 	
 	const userGCs = await listGiftCards(userSearch[0].id);
-	res.status(200).json(userGCs);	
+	res.json({
+		status: STATUS_CODES.OK,
+		data: userGCs
+	});	
 });
-
 
 module.exports = router;

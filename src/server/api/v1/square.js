@@ -1,23 +1,18 @@
 const router = require( 'express' ).Router();
-const { v4: uuidv4 } = require('uuid');
 const { Client, Environment } = require('square');
-const CoinbaseClient = require('coinbase').Client;
+const { v4: uuidv4 } = require('uuid');
 
 const client = new Client({
   environment: Environment.Sandbox,
   accessToken: process.env.SQUARE_ACCESS_TOKEN,
 })
 
-const cbClient = new CoinbaseClient({ 
-	apiKey: process.env.CB_API_KEY, 
-	apiSecret: process.env.CB_API_SECRET,
-	strictSSL: false
-});
-
-const listGiftCards = async () => {
-	const response = await client.giftCardsApi.listGiftCards();
-	// console.log(response);
-	return response;
+// Gets all gift cards linked to a customer by ID.
+const listGiftCards = async ( customerId ) => {
+	const defaultParams = [undefined, undefined, undefined, undefined];
+	const response = await client.giftCardsApi.listGiftCards( ...defaultParams, customerId );
+	const giftCards = JSON.parse(response.body);
+	return giftCards.gift_cards;
 }
 
 const createGiftCard = async ( locationId ) => {
@@ -50,49 +45,32 @@ const createGiftCardActivity = async ( locationId ) => {
 	console.log(response);
 }
 
-const getAccounts = () => new Promise(function(resolve, reject) {
-	cbClient.getAccounts({}, (err, accounts) => {
-		if (err) { 
-			reject(err);
-		} else {
-			resolve(accounts.map( acc => ( {
-				name: acc.name,
-				currency: acc.currency,
-				balance: acc.balance,
-				id: acc.id
-			} ) ) );
+// Searches Square for the user by email.
+const searchUser = async ( customerEmail ) => {
+	const userSearch = await client.customersApi.searchCustomers({
+		limit: 1,
+		query: {
+			filter: {
+				emailAddress: {
+					fuzzy: customerEmail
+				}
+			}
 		}
 	});
-});
+	return userSearch.result.customers;
+}
 
-router.get('/', async (req, res) => {
-	console.log('/api/square/ called');
+// Gets all gift cards linked to a specific email.
+router.get('/giftCards', async (req, res) => {
+	console.log('/api/square/giftCards called');
+	req.body.customerEmail = 'tnguuyen@outlook.com';
 
-	const response = await listGiftCards();
-	// createGiftCard();
-	// createGiftCardActivity('LNAMS88P1QWF7');
-
-	// cbClient.getCurrentUser(function(err, user) {
-	// 	console.log(user);
-	// });
+	const userSearch = await searchUser(req.body.customerEmail);
+	if ( !userSearch.length ) return res.status(404).json('Current user does not exist in Square.');
 	
-	const accounts = await getAccounts();
-	console.log(accounts);
-
-	cbClient.getAccount('a4a3a1c5-c3cc-5e0a-aa15-b2f63262655a', function(err, account) {
-		console.log(account);
-		account.createAddress(null, function(err, address) {
-			console.log(address);
-		});
-	});
-
-
-	if (response.statusCode === 200) {
-		const data = JSON.parse(response.body);
-		res.status(200).json(data.gift_cards);	
-	}
-} );
-
+	const userGCs = await listGiftCards(userSearch[0].id);
+	res.status(200).json(userGCs);	
+});
 
 
 module.exports = router;

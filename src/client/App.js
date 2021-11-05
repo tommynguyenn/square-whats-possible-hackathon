@@ -9,12 +9,12 @@ import GiftCardModal from "./js/GiftCardModal";
 export default function App() {
 	return (
 		<div className="app">
-		<NavBar />
-		<Router>
-			<Route path="/">
+			<NavBar />
+			<Router>
+				<Route path="/">
 					<Onboarding />
-					<GiftCardModal/>
-					<SquareBoxModal/>
+					<GiftCardModal />
+					<SquareBoxModal />
 				</Route>
 			</Router>
 		</div>

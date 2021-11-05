@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import axios from 'axios';
 import { MenuItems } from "./MenuItems"
-import './NavBar.css'
 
 class NavBar extends Component{
     state = { clicked: false }

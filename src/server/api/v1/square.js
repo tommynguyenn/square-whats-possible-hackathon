@@ -22,7 +22,7 @@ const createGiftCard = async ( locationId ) => {
 		locationId,
 		giftCard: { type: 'DIGITAL' }
 	});
-	console.log(response);
+	return response.result.giftCard;
 }
 
 const createGiftCardActivity = async ( locationId ) => {
@@ -43,7 +43,14 @@ const createGiftCardActivity = async ( locationId ) => {
 			]
 		}
 	});
-	console.log(response);
+	return response;
+}
+
+const linkCustomerToGiftCard = async ( giftCardId, customerEmail ) => {
+	const userSearch = await searchUser(customerEmail);
+	const response = await client.giftCardsApi.linkCustomerToGiftCard(giftCardId, { customerId: userSearch[0].id });
+	const giftCards = JSON.parse(response.body);
+	return giftCards.gift_card;
 }
 
 // Searches Square for the user by email.
@@ -66,15 +73,44 @@ router.get('/giftCards/:customerEmail', async (req, res) => {
 	console.log('/api/v1/square/giftCards called');
 
 	const userSearch = await searchUser(req.params.customerEmail);
-	if ( !userSearch.length ) return res.json({
-		status: STATUS_CODES.FAIL,
-		data: 'Current user does not exist in Square.'
-	});
+	if ( !userSearch.length ) {
+		return res.json({
+			status: STATUS_CODES.FAIL,
+			data: 'Current user does not exist in Square.'
+		});
+	}
 	
 	const userGCs = await listGiftCards(userSearch[0].id);
 	res.json({
 		status: STATUS_CODES.OK,
 		data: userGCs
+	});	
+});
+
+router.get('/locations', async (req, res) => {
+	console.log('/api/v1/square/locations called');
+
+	const locations = await client.locationsApi.listLocations();
+	if ( locations.statusCode !== 200 ) {
+		return res.json({
+			status: STATUS_CODES.FAIL,
+			data: 'Failed to get locations.'
+		});
+	}
+
+	res.json({
+		status: STATUS_CODES.OK,
+		data: locations.result.locations
+	});	
+});
+
+router.post('/createGiftCard', async (req, res) => {
+	console.log('/api/v1/square/createGiftCard called');
+	const giftCard = await createGiftCard(req.body.locationId);
+	const linkToCustomer = await linkCustomerToGiftCard(giftCard.id, req.body.customerEmail);
+	res.json({
+		status: STATUS_CODES.OK,
+		data: linkToCustomer
 	});	
 });
 

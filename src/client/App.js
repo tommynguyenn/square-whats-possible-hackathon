@@ -28,13 +28,13 @@ export default function App() {
 
 	return (
 		<div className="app">
-			{/* <NavBar /> */}
+			<NavBar getGiftCards={getGiftCards} user={user} getGiftCards={getGiftCards} />
 			<Router>
-				<Route path="/">
+				<Route exact path="/">
 					{ !user && <Login setUser={setUser} /> }
 					{ user && (
 						<React.Fragment>
-							<GiftCardDetails getGiftCards={getGiftCards} />
+							<GiftCardDetails />
 							<GiftCardContainer giftCards={giftCards} />
 						</React.Fragment>
 					) }

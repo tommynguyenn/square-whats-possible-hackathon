@@ -1,0 +1,87 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: square-gcms-crypto
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: square-gcms-crypto
+  template:
+    metadata:
+      labels:
+        name: square-gcms-crypto
+    spec:
+      containers:
+      - name: application
+        image: registry.digitalocean.com/gcms-crypto-square/app
+        imagePullPolicy: Always
+        env:
+        - name: HOST_URL
+          valueFrom:
+            secretKeyRef:
+              name: public-url
+              key: url
+        - name: SESSION_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: session-secret
+              key: s-secret
+        - name: SQUARE_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: square-access-token
+              key: square-access-token
+        - name: CC_CB_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: cc-cb-api-key
+              key: cc-cb-api-key
+        - name: FIREBASE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: firebase-api-key
+              key: fb-api-key
+        - name: FIREBASE_AUTH_DOMAIN
+          valueFrom:
+            secretKeyRef:
+              name: firebase-auth-domain
+              key: fb-auth-domain
+        - name: FIREBASE_PROJECT_ID
+          valueFrom:
+            secretKeyRef:
+              name: firebase-project-id
+              key: fb-p-id
+        - name: FIREBASE_STORAGE_BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: firebase-storage-bucket
+              key: fb-s-b
+        - name: FIREBASE_MESSAGING_SENDER_ID
+          valueFrom:
+            secretKeyRef:
+              name: firebase-messaging-id
+              key: fb-m-id
+        - name: FIREBASE_APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: firebase-app-id
+              key: fb-app-id
+        ports:
+          - containerPort: 8080
+      imagePullSecrets:
+        - name: do-registry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: square-gcms-crypto
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  selector:
+    name: square-gcms-crypto

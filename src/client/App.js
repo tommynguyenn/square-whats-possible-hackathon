@@ -17,18 +17,29 @@ export default function App() {
 		console.log(response.data.data)
     }
 
+	// const login = async () => {
+	// 	const response = await axios.post('/api/v1/auth/login', { email: 'tnguuyen@outlook.com', password: 'test123' } );
+	// 	setUser(response.data.data);
+	// }
+
 	const login = async () => {
 		const response = await axios.post('/api/v1/auth/login', { email: 'tnguuyen@outlook.com', password: 'test123' } );
 		setUser(response.data.data);
 	}
 
+	const test = async () => {
+		const response = await axios('/api/v1/coinbase/createCheckout');
+		console.log(`https://commerce.coinbase.com/checkout/${response.data.data.id}`);
+	}
+
 	React.useEffect( () => {
 		login();
+		// test();
 	}, [] );
 
 	return (
 		<div className="app">
-			<NavBar getGiftCards={getGiftCards} user={user} getGiftCards={getGiftCards} />
+			<NavBar getGiftCards={getGiftCards} user={user} />
 			<Router>
 				<Route exact path="/">
 					{ !user && <Login setUser={setUser} /> }

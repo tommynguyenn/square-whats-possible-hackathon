@@ -28,10 +28,12 @@ app.use(session({
 // Required routes.
 const squareRoutes = require('./api/v1/square');
 const authRoutes = require('./api/v1/auth');
+const coinbaseRoutes = require('./api/v1/coinbase');
 
 // Apply required routes to servers
 app.use('/api/v1/square', squareRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/coinbase', coinbaseRoutes);
 
 app.get('/*', (req, res) => {
 	res.sendFile(path.join(__dirname, '../../public/index.html'));

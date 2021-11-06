@@ -83,7 +83,7 @@ router.get('/giftCards/:customerEmail', async (req, res) => {
 	const userGCs = await listGiftCards(userSearch[0].id);
 	res.json({
 		status: STATUS_CODES.OK,
-		data: userGCs
+		data: userGCs ? userGCs : []
 	});	
 });
 

@@ -1,0 +1,75 @@
+# This is a basic workflow to help you get started with Actions
+name: Dockerize and Deploy
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build_and_push_image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo 
+        uses: actions/checkout@v2
+      - name: Build image
+        run: 
+          docker build -t ${{ secrets.DIGITALOCEAN_REGISTRY_NAME }}/app .
+      - name: Install doctl 
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Log in to DO Container Registry 
+        run: doctl registry login --expiry-seconds 600
+      - name: Tag image 
+        run:
+          docker tag ${{ secrets.DIGITALOCEAN_REGISTRY_NAME }}/app registry.digitalocean.com/${{ secrets.DIGITALOCEAN_REGISTRY_NAME }}/app
+      - name: Push image to DO Container Registry 
+        run: docker push registry.digitalocean.com/${{ secrets.DIGITALOCEAN_REGISTRY_NAME }}/app
+  deploy:
+    needs: build_and_push_image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo 
+        uses: actions/checkout@v2
+      - name: Install doctl 
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Save DigitalOcean kubeconfig
+        run: doctl kubernetes cluster kubeconfig save ${{ secrets.DIGITALOCEAN_CLUSTER }}
+      - name: Reset pod environment variables
+        run: |
+          kubectl delete secret public-url
+          kubectl delete secret session-secret
+          kubectl delete secret cc-cb-api-key
+          kubectl delete secret firebase-api-key
+          kubectl delete secret firebase-app-id
+          kubectl delete secret firebase-auth-domain
+          kubectl delete secret firebase-messaging-id
+          kubectl delete secret firebase-project-id
+          kubectl delete secret firebase-storage-bucket
+          kubectl delete secret square-access-token
+          kubectl create secret generic public-url --from-literal=url='${{ secrets.PUBLIC_URL }}'
+          kubectl create secret generic session-secret --from-literal=s-secret='${{ secrets.S_SECRET }}'
+          kubectl create secret generic cc-cb-api-key --from-literal=cc-cb-api-key='${{ secrets.CC_CB_API_KEY }}'
+          kubectl create secret generic firebase-api-key --from-literal=fb-api-key='${{ secrets.FIREBASE_API_KEY }}'
+          kubectl create secret generic firebase-app-id --from-literal=fb-app-id='${{ secrets.FIREBASE_APP_ID }}'
+          kubectl create secret generic firebase-auth-domain --from-literal=fb-auth-domain='${{ secrets.FIREBASE_AUTH_DOMAIN }}'
+          kubectl create secret generic firebase-messaging-id --from-literal=fb-m-id='${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}'
+          kubectl create secret generic firebase-project-id --from-literal=fb-p-id='${{ secrets.FIREBASE_PROJECT_ID }}'
+          kubectl create secret generic firebase-storage-bucket --from-literal=fb-s-b='${{ secrets.FIREBASE_STORAGE_BUCKET }}'
+          kubectl create secret generic square-access-token --from-literal=square-access-token='${{ secrets.SQUARE_ACCESS_TOKEN }}'
+      - name: Deploy to DigitalOcean Kubernetes
+        run: kubectl apply -f $GITHUB_WORKSPACE/.github/deployment.yml
+      - name: Rolling restart the pods
+        run: kubectl rollout restart deploy -n default
+      - name: Check Kubernetes services
+        run: kubectl get services

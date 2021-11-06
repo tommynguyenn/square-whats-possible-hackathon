@@ -3,7 +3,7 @@ const coinbase = require('coinbase-commerce-node');
 const { STATUS_CODES } = require('../../utils/constants');
 
 const coinbaseApiKey = process.env.CC_CB_API_KEY;
-const webhookSecret = process.env.CC_SHARED_SECRET;
+const webhookSecret = process.env.CC_CB_SHARED_SECRET;
 
 const client = coinbase.Client;
 client.init(coinbaseApiKey);
@@ -12,9 +12,10 @@ const checkoutApi = coinbase.resources.Checkout;
 const webhookApi = coinbase.Webhook;
 
 router.post('/notification-webhook', async (req, res) => {
-	const rawBody = req.rawBody;
+	console.log('/api/v1/coinbase/notification-webhook called');
+	const rawBody = JSON.stringify(req.body);
 	const signature = req.headers['x-cc-webhook-signature'];
-	
+
 	try {
 		const event = webhookApi.verifyEventBody(rawBody, signature, webhookSecret);
 		console.log(event);
@@ -41,13 +42,13 @@ router.post('/notification-webhook', async (req, res) => {
 		console.log(err);
 		res.json({
 			status: STATUS_CODES.FAIL,
-			data: 'Failed to process Coinbase Commerce event.'
+			data: err.message
 		});
 	}
 });
 
 router.get('/createCheckout', async (req, res) => {
-	console.log('/api/v1/coinbase/notification-webhook called');
+	console.log('/api/v1/coinbase/createCheckout called');
 
 	const checkoutData = {
 		name: '$50 Gift Card to Amazing Store',

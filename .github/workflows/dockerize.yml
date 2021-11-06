@@ -50,7 +50,7 @@ jobs:
           kubectl delete secret public-url
           kubectl delete secret session-secret
           kubectl delete secret cc-cb-api-key
-          # kubectl delete secret cc-cb-shared-secret
+          kubectl delete secret cc-cb-shared-secret
           kubectl delete secret firebase-api-key
           kubectl delete secret firebase-app-id
           kubectl delete secret firebase-auth-domain

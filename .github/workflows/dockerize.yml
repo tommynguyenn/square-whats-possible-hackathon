@@ -47,6 +47,16 @@ jobs:
         run: doctl kubernetes cluster kubeconfig save ${{ secrets.DIGITALOCEAN_CLUSTER }}
       - name: Reset pod environment variables
         run: |
+          kubectl delete secret public-url
+          kubectl delete secret session-secret
+          kubectl delete secret cc-cb-api-key
+          kubectl delete secret firebase-api-key
+          kubectl delete secret firebase-app-id
+          kubectl delete secret firebase-auth-domain
+          kubectl delete secret firebase-messaging-id
+          kubectl delete secret firebase-project-id
+          kubectl delete secret firebase-storage-bucket
+          kubectl delete secret square-access-token
           kubectl create secret generic public-url --from-literal=url='${{ secrets.PUBLIC_URL }}'
           kubectl create secret generic session-secret --from-literal=s-secret='${{ secrets.S_SECRET }}'
           kubectl create secret generic cc-cb-api-key --from-literal=cc-cb-api-key='${{ secrets.CC_CB_API_KEY }}'

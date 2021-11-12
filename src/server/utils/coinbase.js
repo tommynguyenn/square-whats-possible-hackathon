@@ -38,7 +38,6 @@ class Coinbase {
     static async confirmTransaction(txn) {
         try {
             const mappedTxn = this.mapTransaction(txn);
-
             const txnIndex = this.transactionStack.findIndex(transaction => transaction.code === mappedTxn.code);
             if (txnIndex === -1) {
                 return {
@@ -47,13 +46,8 @@ class Coinbase {
                 };
             }
 
-            this.transactionStack.splice(txnIndex, 1);
-
             const charge = await chargeApi.retrieve(mappedTxn.id);
-            // compare checkout ids
-            // create test function to test fake payment webhook
-            console.log(charge);
-
+            
             const checkoutIndex = this.checkoutMap.findIndex( checkout => checkout.checkoutData.id === charge.checkout.id );
             if (checkoutIndex === -1) {
                 return {
@@ -61,6 +55,8 @@ class Coinbase {
                     data: `Checkout ${mappedTxn.id} not found in checkoutMap stack.`
                 };
             }
+
+            this.transactionStack.splice(txnIndex, 1);
 
             return {
                 status: STATUS_CODES.OK,

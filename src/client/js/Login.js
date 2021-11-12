@@ -16,6 +16,22 @@ export default function Login( { setUser } ) {
         }
     }
 
+    const test = async () => {
+        const response = await axios.post('/api/v1/auth/login', { email: 'tnguuyen@outlook.com', password: 'test123' });
+        console.log(response);
+        if ( response.data.status === 'OK' ) {
+            setUser(response.data.data);
+            const res = await axios(`/api/v1/coinbase/test`);
+            console.log(res);
+        } else {
+            setErrorMsg(response.data.data);
+        }
+    }
+
+    React.useEffect(() => {
+		test();
+	}, []);
+
 	return (
         <React.Fragment>
             <h1>Square: Build What's POS_sible </h1>

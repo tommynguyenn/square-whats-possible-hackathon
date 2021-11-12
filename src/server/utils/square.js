@@ -54,21 +54,21 @@ class Square {
         }   
     }
 
-    static async createGiftCardActivity(locationId, giftCardId, value, userEmail) {
+    static async createGiftCardActivity( locationId, giftCardId, value ) {
         try {
             const response = await app.giftCardActivitiesApi.createGiftCardActivity({
                 idempotencyKey: uuidv4(),
                 giftCardActivity: {
-                    type: 'ACTIVATE',			    			// ACTIVATE, LOAD, REDEEM
+                    type: 'ACTIVATE',
                     locationId,
-                    giftCardId, 		                        // ID of gift card
-                    activateActivityDetails: {	     			// only present for ACTIVATE type
+                    giftCardId,
+                    activateActivityDetails: {
                         amountMoney: { 
-                            amount: Number(value.amount),
+                            amount: Number(value.amount) * 100,
                             currency: value.currency
-                        }
-                    },
-                    buyerPaymentInstrumentIds: [ userEmail ]
+                        },
+                        buyerPaymentInstrumentIds: [ 'coinbase' ]
+                    }
                 }
             });
             return {
@@ -112,7 +112,6 @@ class Square {
             const userSearch = await this.searchUser(customerEmail);
             const response = await app.giftCardsApi.linkCustomerToGiftCard(giftCardId, { customerId: userSearch.data[0].id });
             const giftCards = JSON.parse(response.body);
-
             return {
                 status: STATUS_CODES.OK,
                 data: giftCards.gift_card

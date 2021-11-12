@@ -50,6 +50,8 @@ router.post('/notification-webhook', async (req, res) => {
 					data: 'Failed to create gift card activity in Square.'
 				});
 			}
+
+			console.log(`Completed activation of GiftCard ${confirmedTransaction.data.giftCardId} via Charge ${event.data.data.code}.`)
 			break;
 		// case 'charge:failed':
 		// 	break;

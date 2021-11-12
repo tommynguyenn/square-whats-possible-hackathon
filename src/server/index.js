@@ -1,6 +1,8 @@
 require('dotenv').config();
 
 const Firebase = require('./utils/firebase');
+const Square = require('./utils/square');
+const Coinbase = require('./utils/coinbase');
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
@@ -8,6 +10,8 @@ const path = require('path');
 
 const app = express();
 Firebase.init();
+Square.init();
+Coinbase.init();
 
 app.use(express.static(path.join(__dirname, '../../public')));
 app.use(cors());

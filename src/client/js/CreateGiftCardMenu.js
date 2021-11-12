@@ -13,7 +13,7 @@ export default function CreateGiftCardMenu({ user, getGiftCards }) {
 	}
 
     const createGiftCard = async (locationId) => {
-		const response = await axios.post(`/api/v1/square/createGiftCard`, {
+		const response = await axios.post(`/api/v1/square/gift-card`, {
             locationId,
             customerEmail: user.email
         });

@@ -1,116 +1,81 @@
 const router = require( 'express' ).Router();
-const { Client, Environment } = require('square');
-const { v4: uuidv4 } = require('uuid');
 const { STATUS_CODES } = require('../../utils/constants');
+const Square = require('../../utils/square');
 
-const client = new Client({
-  environment: Environment.Sandbox,
-  accessToken: process.env.SQUARE_ACCESS_TOKEN,
-})
+router.post('/gift-card', async (req, res) => {
+	console.log('POST /api/v1/square/gift-card called');
+	const giftCard = await Square.createGiftCard(req.body.locationId);
+	if (giftCard.status === STATUS_CODES.FAIL) {
+		return res.json({
+			status: STATUS_CODES.FAIL,
+			data: "Failed to create gift card in Square."
+		});
+	}
 
-// Gets all gift cards linked to a customer by ID.
-const listGiftCards = async ( customerId ) => {
-	const defaultParams = [undefined, undefined, undefined, undefined];
-	const response = await client.giftCardsApi.listGiftCards( ...defaultParams, customerId );
-	const giftCards = JSON.parse(response.body);
-	return giftCards.gift_cards;
-}
+	const linkToCustomer = await Square.linkCustomerToGiftCard(giftCard.data.id, req.body.customerEmail);
+	if (linkToCustomer.status === STATUS_CODES.FAIL) {
+		return res.json({
+			status: STATUS_CODES.FAIL,
+			data: "Failed to link gift card to user in Square."
+		});
+	}
 
-const createGiftCard = async ( locationId ) => {
-	const response = await client.giftCardsApi.createGiftCard({
-		idempotencyKey: uuidv4(),
-		locationId,
-		giftCard: { type: 'DIGITAL' }
-	});
-	return response.result.giftCard;
-}
-
-const createGiftCardActivity = async ( locationId ) => {
-	const response = await client.giftCardActivitiesApi.createGiftCardActivity({
-		idempotencyKey: uuidv4(),
-		giftCardActivity: {
-			type: 'ACTIVATE',						// ACTIVATE, LOAD, REDEEM
-			locationId,
-			giftCardId: 'gftc:1ecf6fb47124481fb2997bf720000589', 		// ID of gift card
-			activateActivityDetails: {				// only present for ACTIVATE type
-				amountMoney: {
-					amount: 1000,
-					currency: "CAD"
-				}
-			},
-			buyerPaymentInstrumentIds: [
-				'example-1'
-			]
-		}
-	});
-	return response;
-}
-
-const linkCustomerToGiftCard = async ( giftCardId, customerEmail ) => {
-	const userSearch = await searchUser(customerEmail);
-	const response = await client.giftCardsApi.linkCustomerToGiftCard(giftCardId, { customerId: userSearch[0].id });
-	const giftCards = JSON.parse(response.body);
-	return giftCards.gift_card;
-}
-
-// Searches Square for the user by email.
-const searchUser = async ( customerEmail ) => {
-	const userSearch = await client.customersApi.searchCustomers({
-		limit: 1,
-		query: {
-			filter: {
-				emailAddress: {
-					fuzzy: customerEmail
-				}
-			}
-		}
-	});
-	return userSearch.result.customers;
-}
+	res.json({
+		status: STATUS_CODES.OK,
+		data: linkToCustomer.data
+	});	
+});
 
 // Gets all gift cards linked to a specific email.
-router.get('/giftCards/:customerEmail', async (req, res) => {
-	console.log('/api/v1/square/giftCards called');
+router.get('/gift-card/:customerEmail', async (req, res) => {
+	console.log(`GET /api/v1/square/gift-card/${req.params.customerEmail} called`);
 
-	const userSearch = await searchUser(req.params.customerEmail);
-	if ( !userSearch.length ) {
+	const userSearch = await Square.searchUser(req.params.customerEmail);
+	if (userSearch.status === STATUS_CODES.FAIL) {
+		return res.json({
+			status: STATUS_CODES.FAIL,
+			data: 'Failed to grab user from Square.'
+		});
+	}
+
+	if ( !userSearch.data.length ) {
 		return res.json({
 			status: STATUS_CODES.FAIL,
 			data: 'Current user does not exist in Square.'
 		});
 	}
 	
-	const userGCs = await listGiftCards(userSearch[0].id);
+	const userGCs = await Square.listGiftCards(userSearch.data[0].id);
+	if (userGCs.status === STATUS_CODES.FAIL) {
+		return res.json({
+			status: STATUS_CODES.FAIL,
+			data: "Failed to grab user's gift cards from Square."
+		});
+	}
+
+	// Set gift cards for later use.
+	req.session.user.giftCards = userGCs.data;
+
 	res.json({
 		status: STATUS_CODES.OK,
-		data: userGCs ? userGCs : []
+		data: userGCs.data
 	});	
 });
 
 router.get('/locations', async (req, res) => {
-	console.log('/api/v1/square/locations called');
+	console.log('GET /api/v1/square/locations called');
 
-	const locations = await client.locationsApi.listLocations();
-	if ( locations.statusCode !== 200 ) {
+	const locations = await Square.getLocations();
+	if ( locations.status === STATUS_CODES.FAIL ) {
 		return res.json({
 			status: STATUS_CODES.FAIL,
-			data: 'Failed to get locations.'
+			data: 'Failed to get locations from Square.'
 		});
 	}
 
 	res.json({
 		status: STATUS_CODES.OK,
-		data: locations.result.locations
-	});	
-});
-
-router.post('/createGiftCard', async (req, res) => {
-	console.log('/api/v1/square/createGiftCard called');
-	const giftCard = await createGiftCard(req.body.locationId);
-	const linkToCustomer = await linkCustomerToGiftCard(giftCard.id, req.body.customerEmail);
-	res.json({
-		status: STATUS_CODES.OK,
-		data: linkToCustomer
+		data: locations.data
 	});	
 });
 

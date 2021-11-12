@@ -10,32 +10,13 @@ import GiftCardDetails from "./js/GiftCardDetails";
 export default function App() {
 	const [user, setUser] = React.useState(null);
 	const [giftCards, setGiftCards] = React.useState([]);
+	const [selectedGiftCard, setSelectedGiftCard] = React.useState(null);
 
 	const getGiftCards = async () => {  
-        const response = await axios(`/api/v1/square/giftCards/${user.email}`);
+        const response = await axios(`/api/v1/square/gift-card/${user.email}`);
         setGiftCards(response.data.data);
 		console.log(response.data.data)
     }
-
-	// const login = async () => {
-	// 	const response = await axios.post('/api/v1/auth/login', { email: 'tnguuyen@outlook.com', password: 'test123' } );
-	// 	setUser(response.data.data);
-	// }
-
-	const login = async () => {
-		const response = await axios.post('/api/v1/auth/login', { email: 'tnguuyen@outlook.com', password: 'test123' } );
-		setUser(response.data.data);
-	}
-
-	const test = async () => {
-		const response = await axios('/api/v1/coinbase/createCheckout');
-		console.log(`https://commerce.coinbase.com/checkout/${response.data.data.id}`);
-	}
-
-	React.useEffect( () => {
-		login();
-		// test();
-	}, [] );
 
 	return (
 		<div className="app">
@@ -45,8 +26,8 @@ export default function App() {
 					{ !user && <Login setUser={setUser} /> }
 					{ user && (
 						<React.Fragment>
-							<GiftCardDetails />
-							<GiftCardContainer giftCards={giftCards} />
+							<GiftCardDetails selectedGiftCard={selectedGiftCard} />
+							<GiftCardContainer giftCards={giftCards} setSelectedGiftCard={setSelectedGiftCard} />
 						</React.Fragment>
 					) }
 				</Route>

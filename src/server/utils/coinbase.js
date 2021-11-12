@@ -11,20 +11,7 @@ class Coinbase {
             this.coinbaseApiKey = process.env.CC_CB_API_KEY;
             this.webhookSecret = process.env.CC_CB_SHARED_SECRET;
             this.transactionStack = [];
-            this.checkoutMap = [
-                {
-                    checkoutData: {
-                        description: 'Amazing Store - Buy Gift Cards',
-                        id: '053c6e9d-536e-4e08-b3ef-ecd055b764a5',
-                        local_price: [],
-                        name: '$5 Gift Card to Amazing Store',
-                        pricing_type: 'fixed_price',
-                        requested_info: [],
-                        resource: 'checkout'
-                    },
-                    giftCardId: 'gftc:1fde28fc6d4d405aa2166a18b734c330'
-                }
-            ];
+            this.checkoutMap = [];
 
             app = coinbase.Client;
             app.init(this.coinbaseApiKey);
@@ -61,13 +48,13 @@ class Coinbase {
             }
 
             this.transactionStack.splice(txnIndex, 1);
-            
+
             const charge = await chargeApi.retrieve(mappedTxn.id);
             // compare checkout ids
             // create test function to test fake payment webhook
             console.log(charge);
 
-            const checkoutIndex = this.checkoutMap.findIndex( checkout => checkout.checkoutData.id === charge.data.checkout.id );
+            const checkoutIndex = this.checkoutMap.findIndex( checkout => checkout.checkoutData.id === charge.checkout.id );
             if (checkoutIndex === -1) {
                 return {
                     status: STATUS_CODES.FAIL,
@@ -112,7 +99,6 @@ class Coinbase {
                 checkoutData: checkout,
                 giftCardId
             })
-            console.log('checkoutmap', this.checkoutMap);
             return {
                 status: STATUS_CODES.OK,
                 data: checkout

@@ -13,7 +13,7 @@ Firebase.init();
 Square.init();
 Coinbase.init();
 
-app.use(express.static(path.join(__dirname, '../../public')));
+app.use(express.static(path.join(__dirname, '../../dist')));
 app.use(cors());
 app.use(express.urlencoded({
 	extended: true
@@ -40,7 +40,7 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/coinbase', coinbaseRoutes);
 
 app.get('/*', (req, res) => {
-	res.sendFile(path.join(__dirname, '../../public/index.html'));
+	res.sendFile(path.join(__dirname, '../../dist/index.html'));
 });
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}`));

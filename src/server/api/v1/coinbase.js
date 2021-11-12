@@ -19,37 +19,36 @@ router.post('/notification-webhook', async (req, res) => {
 			Coinbase.addPendingTransaction(event.data.data);
 			break;
 		case 'charge:confirmed':
-			const confirmedTransaction = Coinbase.confirmTransaction(event.data.data);
-
+			const confirmedTransaction = await Coinbase.confirmTransaction(event.data.data);
 			if ( confirmedTransaction.status === STATUS_CODES.FAIL ) {
-				console.log(confirmedTransaction.data)
-			} else {
-				console.log(`Confirmed charge: ${event.data.data.code} -> ${confirmedTransaction.data.txnCode}`)
+				return console.log(confirmedTransaction.data)
+			}
 
-				const locations = await Square.getLocations();
-				if ( locations.status === STATUS_CODES.FAIL ) {
-					return res.json({
-						status: STATUS_CODES.FAIL,
-						data: 'Failed to get locations from Square.'
-					});
-				}
-				
-				const args = [
-					// Default location ID
-					locations.data[0].id,
-					// Gift card ID
-					confirmedTransaction.data.giftCardId,
-					// Payment value
-					event.data.data.payments[0].value.local
-				]
+			console.log(`Confirmed charge: ${event.data.data.code} -> ${confirmedTransaction.data.txnCode}`)
 
-				const activity = Square.createGiftCardActivity( ...args, req.session.userEmail );
-				if ( activity.status === STATUS_CODES.FAIL ) {
-					return res.json({
-						status: STATUS_CODES.FAIL,
-						data: 'Failed to create gift card activity in Square.'
-					});
-				}
+			const locations = await Square.getLocations();
+			if ( locations.status === STATUS_CODES.FAIL ) {
+				return res.json({
+					status: STATUS_CODES.FAIL,
+					data: 'Failed to get locations from Square.'
+				});
+			}
+			
+			const args = [
+				// Default location ID
+				locations.data[0].id,
+				// Gift card ID
+				confirmedTransaction.data.giftCardId,
+				// Payment value
+				event.data.data.payments[0].value.local
+			]
+
+			const activity = await Square.createGiftCardActivity( ...args, req.session.userEmail );
+			if ( activity.status === STATUS_CODES.FAIL ) {
+				return res.json({
+					status: STATUS_CODES.FAIL,
+					data: 'Failed to create gift card activity in Square.'
+				});
 			}
 			break;
 		// case 'charge:failed':

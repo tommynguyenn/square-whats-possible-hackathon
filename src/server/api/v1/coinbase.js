@@ -43,7 +43,7 @@ router.post('/notification-webhook', async (req, res) => {
 				event.data.data.payments[0].value.local
 			]
 
-			const activity = await Square.createGiftCardActivity( ...args, req.session.userEmail );
+			const activity = await Square.createGiftCardActivity( 'ACTIVATE', ...args, req.session.userEmail );
 			if ( activity.status === STATUS_CODES.FAIL ) {
 				return res.json({
 					status: STATUS_CODES.FAIL,

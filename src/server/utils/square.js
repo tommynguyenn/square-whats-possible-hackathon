@@ -54,16 +54,16 @@ class Square {
         }   
     }
 
-    static async createGiftCardActivity( locationId, giftCardId, value ) {
+    static async createGiftCardActivity( type, locationId, giftCardId, value ) {
         try {
             const response = await app.giftCardActivitiesApi.createGiftCardActivity({
                 idempotencyKey: uuidv4(),
                 giftCardActivity: {
-                    type: 'ACTIVATE',
+                    type,
                     locationId,
                     giftCardId,
-                    activateActivityDetails: {
-                        amountMoney: { 
+                    [ type === 'ACTIVATE' ? 'activateActivityDetails' : 'loadActivityDetails' ]: {
+                        amountMoney: {
                             amount: Number(value.amount) * 100,
                             currency: value.currency
                         },

@@ -79,4 +79,52 @@ router.get('/locations', async (req, res) => {
 	});	
 });
 
+router.post('/test-activate', async (req, res) => {
+	console.log('GET /api/v1/square/test-activate called');
+
+	const locations = await Square.getLocations();
+	if ( locations.status === STATUS_CODES.FAIL ) {
+		return res.json({
+			status: STATUS_CODES.FAIL,
+			data: 'Failed to get locations from Square.'
+		});
+	}
+
+	const args = [
+		locations.data[0].id,
+		req.body.giftCardId,
+		{ amount: req.body.amount, currency: 'CAD' }
+	]
+
+	const activity = await Square.createGiftCardActivity( 'ACTIVATE', ...args );
+	if ( activity.status === STATUS_CODES.FAIL ) {
+		return res.json({
+			status: STATUS_CODES.FAIL,
+			data: 'Failed to create gift card activity in Square.'
+		});
+	}
+
+	res.json({
+		status: STATUS_CODES.OK,
+		data: JSON.parse(activity.data.body)
+	});	
+});
+
+router.post('/test-load', async (req, res) => {
+	console.log('GET /api/v1/square/test-load called');
+
+	const locations = await Square.getLocations();
+	if ( locations.status === STATUS_CODES.FAIL ) {
+		return res.json({
+			status: STATUS_CODES.FAIL,
+			data: 'Failed to get locations from Square.'
+		});
+	}
+
+	res.json({
+		status: STATUS_CODES.OK,
+		data: 'hello'
+	});	
+});
+
 module.exports = router;

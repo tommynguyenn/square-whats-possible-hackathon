@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from '@mui/material';
 
 export default function GiftCard( { giftCard, setSelectedGiftCard }) {
     // TODO: make a function that formats the giftCard.balance_money.amount to a dollar amount. 

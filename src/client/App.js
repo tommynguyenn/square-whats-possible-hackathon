@@ -1,26 +1,20 @@
 import React from 'react';
-import axios from 'axios';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Login from './js/Login';
 import GiftCardContainer from './js/GiftCardContainer';
 import NavBar from "./js/Navbar/NavBar"
-import './css/app.css';
 import GiftCardDetails from "./js/GiftCardDetails";
+import { getGiftCards } from './js/utils/helpers';
+import './css/app.css';
 
 export default function App() {
 	const [user, setUser] = React.useState(null);
 	const [giftCards, setGiftCards] = React.useState([]);
 	const [selectedGiftCard, setSelectedGiftCard] = React.useState(null);
 
-	const getGiftCards = async () => {  
-        const response = await axios(`/api/v1/square/gift-card/${user.email}`);
-        setGiftCards(response.data.data);
-		console.log(response.data.data)
-    }
-
 	return (
 		<div className="app">
-			<NavBar getGiftCards={getGiftCards} user={user} />
+			<NavBar getGiftCards={() => getGiftCards(user.email, setGiftCards)} user={user} />
 			<Router>
 				<Route exact path="/">
 					{ !user && <Login setUser={setUser} /> }

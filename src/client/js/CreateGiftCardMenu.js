@@ -1,32 +1,17 @@
 import React from 'react';
 import {Button, Menu, MenuItem} from '@mui/material';
-import axios from 'axios';
+import { createGiftCard, getLocations } from './utils/helpers';
 
 export default function CreateGiftCardMenu({ user, getGiftCards }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [locations, setLocations] = React.useState([]);
     const open = Boolean(anchorEl);
 
-    const getLocations = async () => {
-		const response = await axios(`/api/v1/square/locations`);
-		setLocations(response.data.data);
-	}
-
-    const createGiftCard = async (locationId) => {
-		const response = await axios.post(`/api/v1/square/gift-card`, {
-            locationId,
-            customerEmail: user.email
-        });
-        handleClose();
-        await getGiftCards();
-		console.log(response);
-	}
-
     const handleClick = (event) => { setAnchorEl(event.currentTarget) };
     const handleClose = () => { setAnchorEl(null) };
 
     React.useEffect( () => {
-        getLocations();
+        getLocations(setLocations);
     }, [] );
 
     return (
@@ -49,7 +34,14 @@ export default function CreateGiftCardMenu({ user, getGiftCards }) {
             >
                 {
                     locations.length > 0 && locations.map( 
-                        location => <MenuItem key={location.id} onClick={() => createGiftCard(location.id)}>{location.name}</MenuItem>
+                        location => (
+                            <MenuItem 
+                                key={location.id} 
+                                onClick={() => createGiftCard(locationId, user.email, handleClose, getGiftCards)}
+                            >
+                                {location.name}
+                            </MenuItem>
+                        )
                     )
                 }
             </Menu>

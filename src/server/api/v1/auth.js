@@ -13,10 +13,7 @@ router.post('/login', async (req, res) => {
         });
     }
 
-    req.session.user = {
-        email: req.body.email,
-        giftCards: []
-    }
+    req.session.userEmail = req.body.email;
 
     res.json({
         status: STATUS_CODES.OK,

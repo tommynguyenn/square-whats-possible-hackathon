@@ -54,7 +54,7 @@ router.get('/gift-card/:customerEmail', async (req, res) => {
 	}
 
 	// Set gift cards for later use.
-	req.session.user.giftCards = userGCs.data;
+	req.session.giftCards = userGCs.data;
 
 	res.json({
 		status: STATUS_CODES.OK,

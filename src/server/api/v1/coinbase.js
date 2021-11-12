@@ -38,12 +38,12 @@ router.post('/notification-webhook', async (req, res) => {
 					// Default location ID
 					locations.data[0].id,
 					// Gift card ID
-					confirmedTransaction.data.giftCardId || 'gftc:1ecf6fb47124481fb2997bf720000589',
+					confirmedTransaction.data.giftCardId,
 					// Payment value
 					event.data.data.payments[0].value.local
 				]
 
-				const activity = Square.createGiftCardActivity( ...args, req.session.user.email );
+				const activity = Square.createGiftCardActivity( ...args, req.session.userEmail );
 				if ( activity.status === STATUS_CODES.FAIL ) {
 					return res.json({
 						status: STATUS_CODES.FAIL,

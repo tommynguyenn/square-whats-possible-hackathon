@@ -1,34 +1,24 @@
 import React from 'react';
 import { Button, TextField } from '@mui/material';
-import { activateGiftCard, testActivateGiftCard } from './utils/helpers';
+import { performGiftCardAction, testGiftCardAction } from './utils/helpers';
 
 export default function GiftCardDetails({ selectedGiftCard }){
     const [amount, setAmount] = React.useState(0);
 
     const activate = async () => {
-        activateGiftCard( amount, selectedGiftCard.id );
-    }
-
-    const testActivate = async () => {
-        testActivateGiftCard( amount, selectedGiftCard.id );
+        performGiftCardAction( amount, selectedGiftCard.id, 'ACTIVATE' );
     }
 
     const load = async () => {
-        console.log('load')
-        // const response = await axios.post( '/api/v1/square/load', { 
-        //     amount, 
-        //     giftCardId: selectedGiftCard.id 
-        // } );
-        // console.log(response.data);
+        performGiftCardAction( amount, selectedGiftCard.id, 'LOAD' );
+    }
+
+    const testActivate = async () => {
+        testGiftCardAction( amount, selectedGiftCard.id, 'activate' );
     }
 
     const testLoad = async () => {
-        console.log('test load')
-        // const response = await axios.post( '/api/v1/square/test-load', { 
-        //     amount, 
-        //     giftCardId: selectedGiftCard.id 
-        // } );
-        // console.log(response.data);
+        testGiftCardAction( amount, selectedGiftCard.id, 'load' );
     }
 
     return (

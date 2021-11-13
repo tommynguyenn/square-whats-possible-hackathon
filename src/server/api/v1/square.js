@@ -2,6 +2,7 @@ const router = require( 'express' ).Router();
 const { STATUS_CODES } = require('../../utils/constants');
 const Square = require('../../utils/square');
 
+// Creates a gift card and links it to the user.
 router.post('/gift-card', async (req, res) => {
 	console.log('POST /api/v1/square/gift-card called');
 	const giftCard = await Square.createGiftCard(req.body.locationId);
@@ -62,6 +63,7 @@ router.get('/gift-card/:customerEmail', async (req, res) => {
 	});	
 });
 
+// Gets all locations linked to the business.
 router.get('/locations', async (req, res) => {
 	console.log('GET /api/v1/square/locations called');
 
@@ -79,7 +81,9 @@ router.get('/locations', async (req, res) => {
 	});	
 });
 
-router.post('/test-activate', async (req, res) => {
+// FOR TESTING PURPOSES
+// Performs test action on a gift card with a provided amount.
+router.post('/test/:type', async (req, res) => {
 	console.log('GET /api/v1/square/test-activate called');
 
 	const locations = await Square.getLocations();
@@ -91,12 +95,13 @@ router.post('/test-activate', async (req, res) => {
 	}
 
 	const args = [
+		req.params.type.toUpperCase(),
 		locations.data[0].id,
 		req.body.giftCardId,
 		{ amount: req.body.amount, currency: 'CAD' }
 	]
 
-	const activity = await Square.createGiftCardActivity( 'ACTIVATE', ...args );
+	const activity = await Square.createGiftCardActivity( ...args );
 	if ( activity.status === STATUS_CODES.FAIL ) {
 		return res.json({
 			status: STATUS_CODES.FAIL,
@@ -107,23 +112,6 @@ router.post('/test-activate', async (req, res) => {
 	res.json({
 		status: STATUS_CODES.OK,
 		data: JSON.parse(activity.data.body)
-	});	
-});
-
-router.post('/test-load', async (req, res) => {
-	console.log('GET /api/v1/square/test-load called');
-
-	const locations = await Square.getLocations();
-	if ( locations.status === STATUS_CODES.FAIL ) {
-		return res.json({
-			status: STATUS_CODES.FAIL,
-			data: 'Failed to get locations from Square.'
-		});
-	}
-
-	res.json({
-		status: STATUS_CODES.OK,
-		data: 'hello'
 	});	
 });
 

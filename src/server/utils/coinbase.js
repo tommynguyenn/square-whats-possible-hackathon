@@ -62,6 +62,7 @@ class Coinbase {
                 status: STATUS_CODES.OK,
                 data: {
                     giftCardId: this.checkoutMap[checkoutIndex].giftCardId,
+                    transactionType: this.checkoutMap[checkoutIndex].type,
                     txnCode: mappedTxn.code
                 }
             }
@@ -88,12 +89,13 @@ class Coinbase {
         }
     }
 
-    static async createCheckout(checkoutData, giftCardId) {
+    static async createCheckout(checkoutData, giftCardId, type) {
         try {
             const checkout = await checkoutApi.create(checkoutData);
             this.checkoutMap.push({
                 checkoutData: checkout,
-                giftCardId
+                giftCardId,
+                type
             })
             return {
                 status: STATUS_CODES.OK,

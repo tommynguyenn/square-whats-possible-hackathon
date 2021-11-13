@@ -35,15 +35,19 @@ router.post('/notification-webhook', async (req, res) => {
 			}
 			
 			const args = [
+				// Transaction type
+				confirmedTransaction.data.transactionType,
 				// Default location ID
 				locations.data[0].id,
 				// Gift card ID
 				confirmedTransaction.data.giftCardId,
 				// Payment value
-				event.data.data.payments[0].value.local
+				event.data.data.payments[0].value.local,
+				// User email
+				req.session.userEmail
 			]
 
-			const activity = await Square.createGiftCardActivity( 'ACTIVATE', ...args, req.session.userEmail );
+			const activity = await Square.createGiftCardActivity( ...args );
 			if ( activity.status === STATUS_CODES.FAIL ) {
 				return res.json({
 					status: STATUS_CODES.FAIL,
@@ -78,7 +82,7 @@ router.post('/checkout', async (req, res) => {
 		requested_info: ['name', 'email']
 	};
 
-	const checkoutResponse = await Coinbase.createCheckout(checkoutData, req.body.giftCardId);
+	const checkoutResponse = await Coinbase.createCheckout(checkoutData, req.body.giftCardId, req.body.type);
 	if ( checkoutResponse.status === STATUS_CODES.FAIL ) {
 		console.log(checkoutResponse.data);
 	}

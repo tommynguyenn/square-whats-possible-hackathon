@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, TextField } from '@mui/material';
 import { performGiftCardAction, testGiftCardAction } from './utils/helpers';
 
-export default function GiftCardDetails({ selectedGiftCard }){
+export default function GiftCardDetails({ getGiftCards, selectedGiftCard }){
     const [amount, setAmount] = React.useState(0);
 
     const activate = async () => {
@@ -14,15 +14,15 @@ export default function GiftCardDetails({ selectedGiftCard }){
     }
 
     const testActivate = async () => {
-        testGiftCardAction( amount, selectedGiftCard.id, 'activate' );
+        testGiftCardAction( amount, selectedGiftCard.id, 'activate', getGiftCards );
     }
 
     const testLoad = async () => {
-        testGiftCardAction( amount, selectedGiftCard.id, 'load' );
+        testGiftCardAction( amount, selectedGiftCard.id, 'load', getGiftCards );
     }
 
     return (
-        <div className="giftBox">
+        <div className="gift-card-detail">
             <h1>GIFT CARD DETAILS</h1>
             { 
                 selectedGiftCard &&

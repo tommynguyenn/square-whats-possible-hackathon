@@ -1,0 +1,24 @@
+.authentication {
+    margin: 0 auto;
+    width: 40%;
+    max-width: 500px;
+    min-width: 350px;
+    display: flex;
+    flex-direction: column;
+}
+
+.authentication-cta {
+    width: 100%;
+    margin: 10px auto 0 auto;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 10px;
+}
+
+.authentication .MuiTextField-root {
+    margin-bottom: 10px !important;
+}
+
+.authentication-cta button {
+    width: 100%;
+}

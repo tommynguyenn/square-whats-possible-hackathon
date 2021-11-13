@@ -39,7 +39,7 @@ router.get('/gift-card/:customerEmail', async (req, res) => {
 		});
 	}
 
-	if ( !userSearch.data.length ) {
+	if ( userSearch.data.length === 0 ) {
 		return res.json({
 			status: STATUS_CODES.FAIL,
 			data: 'Current user does not exist in Square.'
@@ -55,11 +55,11 @@ router.get('/gift-card/:customerEmail', async (req, res) => {
 	}
 
 	// Set gift cards for later use.
-	req.session.giftCards = userGCs.data;
+	req.session.giftCards = userGCs.data ? userGCs.data : [];
 
 	res.json({
 		status: STATUS_CODES.OK,
-		data: userGCs.data
+		data: userGCs.data ? userGCs.data : []
 	});	
 });
 

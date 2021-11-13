@@ -1,5 +1,5 @@
 const firebase = require( "firebase/app" );
-const { getAuth, signInWithEmailAndPassword, updateProfile } = require('firebase/auth');
+const { getAuth, signInWithEmailAndPassword, updateProfile, createUserWithEmailAndPassword } = require('firebase/auth');
 const { STATUS_CODES } = require('../utils/constants');
 let app = null;
 
@@ -16,6 +16,23 @@ class Firebase {
 
         app = firebase.initializeApp(config);
 		console.log( `\nConnected to firebase app ${process.env.FIREBASE_PROJECT_ID}.` );
+    }
+
+    static async registerUser( email, password ) {
+        try {
+            const auth = getAuth();
+            const response = await createUserWithEmailAndPassword(auth, email, password);
+            
+            return {
+                status: STATUS_CODES.OK,
+                data: response.user
+            };
+        } catch ( err ) {
+            return {
+                status: STATUS_CODES.FAIL,
+                data: err.message
+            };
+        }
     }
 
     /**

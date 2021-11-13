@@ -9,8 +9,14 @@ import './css/app.css';
 
 export default function App() {
 	const [user, setUser] = React.useState(null);
-	const [giftCards, setGiftCards] = React.useState([]);
+	const [giftCards, setGiftCards] = React.useState(null);
 	const [selectedGiftCard, setSelectedGiftCard] = React.useState(null);
+
+	const getGCs = async () => {
+		await getGiftCards(user.email, setGiftCards)
+	}
+	
+	console.log(user);
 
 	return (
 		<div className="app">
@@ -19,10 +25,10 @@ export default function App() {
 				<Route exact path="/">
 					{ !user && <Login setUser={setUser} /> }
 					{ user && (
-						<React.Fragment>
-							<GiftCardDetails selectedGiftCard={selectedGiftCard} />
-							<GiftCardContainer giftCards={giftCards} setSelectedGiftCard={setSelectedGiftCard} />
-						</React.Fragment>
+						<div className="content">
+							<GiftCardContainer giftCards={giftCards} getGiftCards={getGCs} setSelectedGiftCard={setSelectedGiftCard} />
+							<GiftCardDetails getGiftCards={getGCs} selectedGiftCard={selectedGiftCard} />
+						</div>
 					) }
 				</Route>
 			</Router>

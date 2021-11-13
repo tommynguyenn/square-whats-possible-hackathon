@@ -1,26 +1,32 @@
-.NavBarItems{
-    background:linear-gradient(90deg, rgb(100,94,254) 0%, rgba(73,63,252,1) 100%);
-    height:80px;
+.navBarItems{
+    background: linear-gradient(90deg, rgb(100,94,254) 0%, rgba(73,63,252,1) 100%);
+    height: 80px;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size:1.2rem;
+    font-size: 1.2rem;
+    top: 0;
+    position: fixed;
 }
+
 .nav-menu{
-    display:grid;
-    grid-template-columns:repeat(5,auto);
+    display: grid;
+    grid-template-columns: repeat(5,auto);
     grid-gap: 10px;
-    list-style:none;
-    text-align:center;
-    width:70vw;
+    list-style: none;
+    text-align: center;
+    width: 70vw;
     justify-content: end;
-    margin-right:2rem
+    margin-right: 2rem
 }
+
 .nav-links{
-    color:white;
-    text-decoration:none;
+    color: white;
+    text-decoration: none;
     padding: 0.5rem 1rem;
 }
+
 .nav-link:hover{
     background-color: #6d78f7
 }

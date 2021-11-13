@@ -138,6 +138,21 @@ class Square {
             };
         }
     }
+
+    static async createCustomer( emailAddress ) {
+        try {
+            const response = await app.customersApi.createCustomer({ emailAddress });
+            return {
+                status: STATUS_CODES.OK,
+                data: response.result.customer
+            }
+        } catch (err) {
+            return {
+                status: STATUS_CODES.FAIL,
+                data: err.message
+            };
+        }
+    }
 }
 
 module.exports = Square;

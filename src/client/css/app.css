@@ -1,44 +1,25 @@
 @import './navbar.css';
+@import './auth.css';
+@import './giftCard.css';
 
-h1{
-    text-align: center;
+:root {
+    --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 5%);
+}
+
+body {
+    background-color: #FFFFFF;
+    margin: 0;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
-.app{
-    background-color:whitesmoke;
-    width: auto;
-    height: auto;
-}
 
-.boxWrapper {
-    width: 1000px;
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.box {
-    width:400px;
-    height:200px;
-    border-radius: 20px;
-    display:flex;
-    flex-direction:column;
-    text-align:center;
-    box-shadow:5px 10px #DCDCDC;
-    background-color: white;
-    margin-left: 20px;
-}
-
-.giftBox{
-    position: fixed;
-    right: 90px;
-    width: 500px;
-    height: 600px;
-    border-radius: 20px;
+h1 {
     text-align: center;
-    box-shadow: 5px 10px #DCDCDC;
-    background-color: white;
-    margin-left: 200px;
+}
+
+.content {
+    margin-top: 80px;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 5%;
 }

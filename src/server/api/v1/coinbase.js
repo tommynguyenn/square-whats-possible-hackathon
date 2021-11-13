@@ -57,8 +57,6 @@ router.post('/notification-webhook', async (req, res) => {
 
 			console.log(`Completed activation of GiftCard ${confirmedTransaction.data.giftCardId} via Charge ${event.data.data.code}.`)
 			break;
-		// case 'charge:failed':
-		// 	break;
 		default:
 			console.log(`Unhandled charge type: ${event.data.type}`);
 	}

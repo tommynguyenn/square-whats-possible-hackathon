@@ -1,5 +1,6 @@
 import React from 'react';
-import {Button, Menu, MenuItem} from '@mui/material';
+import { Button, Menu, MenuItem } from '@mui/material';
+import { Add } from '@mui/icons-material'; 
 import { createGiftCard, getLocations } from './utils/helpers';
 
 export default function CreateGiftCardMenu({ user, getGiftCards }) {
@@ -24,7 +25,8 @@ export default function CreateGiftCardMenu({ user, getGiftCards }) {
                 onClick={handleClick}
                 variant="contained"
             >
-                Add a new gift card
+                <Add />
+                Gift Card
             </Button>
             <Menu
                 id="create-giftcard-menu"
@@ -37,7 +39,7 @@ export default function CreateGiftCardMenu({ user, getGiftCards }) {
                         location => (
                             <MenuItem 
                                 key={location.id} 
-                                onClick={() => createGiftCard(locationId, user.email, handleClose, getGiftCards)}
+                                onClick={() => createGiftCard(location.id, user.email, handleClose, getGiftCards)}
                             >
                                 {location.name}
                             </MenuItem>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from '@mui/material';
 import { MenuItems } from "./MenuItems";
 import CreateGiftCardMenu from '../CreateGiftCardMenu';
 
@@ -10,9 +9,8 @@ export default function Navbar({ getGiftCards, user }) {
     }
 
     return(
-        <nav className="NavBarItems">
+        <nav className="navBarItems">
             <h1 className="navbar-logo">Square</h1>
-            <Button variant="contained" onClick={getGiftCards}>Get gift cards</Button>
             <CreateGiftCardMenu user={user} getGiftCards={getGiftCards} />
             <div className="menu-icon">
                 

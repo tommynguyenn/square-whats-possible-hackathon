@@ -1,7 +1,7 @@
 import React from 'react';
 import GiftCard from './GiftCard'
 
-export default function GiftCardContainer( { giftCards, getGiftCards, setSelectedGiftCard }) {
+export default function GiftCardContainer( { giftCards, getGiftCards, selectedGiftCard, setSelectedGiftCard }) {
 	
     React.useEffect( () => {
         getGiftCards();
@@ -14,7 +14,7 @@ export default function GiftCardContainer( { giftCards, getGiftCards, setSelecte
             { 
                 giftCards && giftCards.length > 0 && ( 
                     giftCards.map( gc => (
-                        <GiftCard key={gc.id} giftCard={gc} setSelectedGiftCard={setSelectedGiftCard} />
+                        <GiftCard key={gc.id} giftCard={gc} selectedGiftCard={selectedGiftCard} setSelectedGiftCard={setSelectedGiftCard} />
                     ) ) 
                 )
             }

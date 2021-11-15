@@ -18,6 +18,7 @@
     box-shadow: var(--box-shadow);
     border: 1px solid rgb(0 0 0 / 10%);
     background-color: #FFFFFF;
+    transition: 0.2s;
 }
 
 .gift-card:before {
@@ -25,6 +26,15 @@
     content: 'gift card stripe';
     margin-top: 20px;
     height: 40px;
+}
+
+.gift-card:hover {
+    cursor: pointer;
+    border-color: #94c1ff;
+}
+
+.gift-card.selected {
+    border-color: #006AFF;
 }
 
 .gift-card p {

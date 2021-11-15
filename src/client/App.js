@@ -25,7 +25,7 @@ export default function App() {
 						<React.Fragment>
 							<NavBar getGiftCards={() => getGiftCards(user.email, setGiftCards)} user={user} />
 							<div className="content">
-								<GiftCardContainer giftCards={giftCards} getGiftCards={getGCs} setSelectedGiftCard={setSelectedGiftCard} />
+								<GiftCardContainer giftCards={giftCards} getGiftCards={getGCs} selectedGiftCard={selectedGiftCard} setSelectedGiftCard={setSelectedGiftCard} />
 								<GiftCardDetails getGiftCards={getGCs} selectedGiftCard={selectedGiftCard} />
 							</div>
 						</React.Fragment>

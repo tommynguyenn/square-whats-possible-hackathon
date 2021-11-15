@@ -22,7 +22,7 @@ router.post('/register', async (req, res) => {
         });
     }
 
-    req.session.userEmail = req.body.email;
+    req.session.user = auth.data.user;
 
     res.json({
         status: STATUS_CODES.OK,
@@ -40,8 +40,7 @@ router.post('/login', async (req, res) => {
             data: auth.data
         });
     }
-
-    req.session.userEmail = req.body.email;
+    req.session.user = auth.data.user;
     
     res.json({
         status: STATUS_CODES.OK,

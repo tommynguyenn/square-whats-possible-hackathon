@@ -10,22 +10,9 @@ export default function Navbar({ getGiftCards, user }) {
 
     return(
         <nav className="navBarItems">
-            <h1 className="navbar-logo">Square</h1>
-            <CreateGiftCardMenu user={user} getGiftCards={getGiftCards} />
-            <div className="menu-icon">
-                
-            </div>
-            <ul className={clicked ? 'nav-menu active' : 'nav-menu'}>
-                {MenuItems.map((item,index) => {
-                    return(
-                        <li key={index}>
-                            <a className={item.cName} href={item.url}>
-                                {item.title}
-                            </a>
-                        </li> 
-                    );
-                })}
-                
+            <h1 className="navbar-logo">The Circle Store</h1>
+            <ul className='navbar-menu'>
+                <CreateGiftCardMenu user={user} getGiftCards={getGiftCards} />
             </ul>
         </nav>
     );              

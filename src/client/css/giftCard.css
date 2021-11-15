@@ -1,8 +1,10 @@
 .gift-card-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
-    width: fit-content;
+    padding: 20px 440px 40px 0;
     overflow-y: scroll;
 }
 
@@ -15,11 +17,11 @@
     text-align: center;
     box-shadow: var(--box-shadow);
     border: 1px solid rgb(0 0 0 / 10%);
-    background-color: white;
+    background-color: #FFFFFF;
 }
 
 .gift-card:before {
-    background-color: black;
+    background-color: #000000;
     content: 'gift card stripe';
     margin-top: 20px;
     height: 40px;
@@ -31,10 +33,32 @@
 }
 
 .gift-card-detail {
-    width: 500px;
-    height: 600px;
-    border-radius: 20px;
+    padding: 20px;
+    position: fixed;
+    top: 60px;
+    right: 0px;
+    width: 400px;
+    height: calc(100vh - 80px);
+    border-left: 1px solid rgb(0 0 0 / 10%);
     text-align: center;
-    box-shadow: var(--box-shadow);
-    background-color: white;
+    background-color: #FFFFFF;
+}
+
+.gift-card-detail__info {
+    text-align: left;
+}
+
+.gift-card-detail__info-label {
+    font-weight: bold;
+}  
+
+.gift-card-detail__cta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.gift-card-detail__cta button {
+    height: fit-content;
+    white-space: nowrap;
 }

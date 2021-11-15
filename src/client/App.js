@@ -16,19 +16,19 @@ export default function App() {
 		await getGiftCards(user.email, setGiftCards)
 	}
 	
-	console.log(user);
-
 	return (
 		<div className="app">
-			<NavBar getGiftCards={() => getGiftCards(user.email, setGiftCards)} user={user} />
 			<Router>
 				<Route exact path="/">
 					{ !user && <Login setUser={setUser} /> }
 					{ user && (
-						<div className="content">
-							<GiftCardContainer giftCards={giftCards} getGiftCards={getGCs} setSelectedGiftCard={setSelectedGiftCard} />
-							<GiftCardDetails getGiftCards={getGCs} selectedGiftCard={selectedGiftCard} />
-						</div>
+						<React.Fragment>
+							<NavBar getGiftCards={() => getGiftCards(user.email, setGiftCards)} user={user} />
+							<div className="content">
+								<GiftCardContainer giftCards={giftCards} getGiftCards={getGCs} setSelectedGiftCard={setSelectedGiftCard} />
+								<GiftCardDetails getGiftCards={getGCs} selectedGiftCard={selectedGiftCard} />
+							</div>
+						</React.Fragment>
 					) }
 				</Route>
 			</Router>

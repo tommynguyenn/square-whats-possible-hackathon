@@ -24,17 +24,18 @@ export default function Login( { setUser } ) {
     }, []);
 
 	return (
-        <React.Fragment>
+        <div className="authentication">
             <h1>Square: Build What's POS_sible </h1>
-            <div className="authentication">
-                <TextField label="Email" variant="outlined" type="email" onChange={e => setEmail(e.target.value)} />
-                <TextField label="Password" variant="outlined" type="password" onChange={e => setPassword(e.target.value)} />
-                <div className="authentication-cta">
-                    <Button variant="contained" onClick={loginUser}>Log in</Button>
-                    <Button variant="outlined" onClick={registerUser}>Register</Button>
-                </div>
+            <TextField label="Email Address" variant="outlined" type="email" onChange={e => setEmail(e.target.value)} />
+            <TextField label="Password" variant="outlined" type="password" onChange={e => setPassword(e.target.value)} />
+            <div className="authentication-cta">
+                <Button variant="contained" onClick={loginUser}>Log In</Button>
+                <Button variant="outlined" onClick={registerUser}>Register</Button>
             </div>
-            { feedbackMsg }
-        </React.Fragment>
+            <div className="authentication-feedback">
+                <span>{ feedbackMsg }</span>
+                <span>Manage your gift cards with crypto currency!</span>
+            </div>
+        </div>
 	);
 }

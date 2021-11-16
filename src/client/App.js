@@ -26,6 +26,9 @@ export default function App() {
 						setSelectedGiftCard={setSelectedGiftCard}
 					/> : <Login setUser={setUser} redirect={redirect} /> }
 				</Route>
+				<Route path="/">
+					<Redirect from="/" to="/" />
+				</Route>
 			</Router>
 		</div>
 	);

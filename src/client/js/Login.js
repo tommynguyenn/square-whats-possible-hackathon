@@ -15,14 +15,6 @@ export default function Login( { setUser, redirect } ) {
         register({ email, password }, setFeedbackMsg);
     }
 
-    const test = () => {
-        login({ email: 'tnguuyen@outlook.com', password: 'test123' }, setUser, setFeedbackMsg, redirect);
-    }
-
-    React.useEffect( () => {
-        test();
-    }, []);
-
 	return (
         <div className="authentication">
             <h1>Square: Build What's POS_sible </h1>

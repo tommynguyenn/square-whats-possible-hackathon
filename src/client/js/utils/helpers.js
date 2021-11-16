@@ -5,10 +5,11 @@ const STATUS_CODES = {
     FAIL: 'FAIL'
 }
 
-export async function login( loginCredentials, setUser, setFeedbackMsg ) {
+export async function login( loginCredentials, setUser, setFeedbackMsg, redirect ) {
     const response = await axios.post('/api/v1/auth/login', loginCredentials);
     if ( response.data.status === STATUS_CODES.OK ) {
         setUser(response.data.data);
+        redirect('/dashboard');
     } else {
         setFeedbackMsg(response.data.data);
     }

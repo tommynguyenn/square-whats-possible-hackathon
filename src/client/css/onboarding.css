@@ -1,0 +1,27 @@
+.onboarding {
+    border: 1px solid #e0e2e3;
+    border-radius: 5px;
+    background-color: #FFFFFF;
+    padding: 40px;
+}
+
+.onboarding-connect, 
+.onboarding-link, 
+.onboarding-share {
+    padding: 80px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.onboarding-connect button, 
+.onboarding-link button, 
+.onboarding-share button {
+    width: 25%;
+    margin: 20px auto 0;
+}
+
+.onboarding-link-textfield {
+    width: 80%;
+    margin: 10px auto 0 !important;
+}

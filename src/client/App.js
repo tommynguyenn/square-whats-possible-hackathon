@@ -1,35 +1,30 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, useHistory, Redirect } from 'react-router-dom';
 import Login from './js/Login';
-import GiftCardContainer from './js/GiftCardContainer';
-import NavBar from "./js/Navbar/NavBar"
-import GiftCardDetails from "./js/GiftCardDetails";
-import { getGiftCards } from './js/utils/helpers';
+import Dashboard from './js/Dashboard';
 import './css/app.css';
 
 export default function App() {
 	const [user, setUser] = React.useState(null);
 	const [giftCards, setGiftCards] = React.useState(null);
 	const [selectedGiftCard, setSelectedGiftCard] = React.useState(null);
+	const history = useHistory();
 
-	const getGCs = async () => {
-		await getGiftCards(user.email, setGiftCards)
+	function redirect(path) {
+		history.push(path);
 	}
-	
+
 	return (
 		<div className="app">
 			<Router>
 				<Route exact path="/">
-					{ !user && <Login setUser={setUser} /> }
-					{ user && (
-						<React.Fragment>
-							<NavBar getGiftCards={() => getGiftCards(user.email, setGiftCards)} user={user} />
-							<div className="content">
-								<GiftCardContainer giftCards={giftCards} getGiftCards={getGCs} selectedGiftCard={selectedGiftCard} setSelectedGiftCard={setSelectedGiftCard} />
-								<GiftCardDetails getGiftCards={getGCs} selectedGiftCard={selectedGiftCard} />
-							</div>
-						</React.Fragment>
-					) }
+					{ user ? <Dashboard 
+						user={user}
+						giftCards={giftCards}
+						setGiftCards={setGiftCards}
+						selectedGiftCard={selectedGiftCard}
+						setSelectedGiftCard={setSelectedGiftCard}
+					/> : <Login setUser={setUser} redirect={redirect} /> }
 				</Route>
 			</Router>
 		</div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, TextField } from '@mui/material';
 import { login, register } from './utils/helpers';
 
-export default function Login( { setUser } ) {
+export default function Login( { setUser, redirect } ) {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [feedbackMsg, setFeedbackMsg] = React.useState('');
@@ -16,7 +16,7 @@ export default function Login( { setUser } ) {
     }
 
     const test = () => {
-        login({ email: 'tnguuyen@outlook.com', password: 'test123' }, setUser, setFeedbackMsg);
+        login({ email: 'tnguuyen@outlook.com', password: 'test123' }, setUser, setFeedbackMsg, redirect);
     }
 
     React.useEffect( () => {
@@ -26,8 +26,8 @@ export default function Login( { setUser } ) {
 	return (
         <div className="authentication">
             <h1>Square: Build What's POS_sible </h1>
-            <TextField label="Email Address" variant="outlined" type="email" onChange={e => setEmail(e.target.value)} />
-            <TextField label="Password" variant="outlined" type="password" onChange={e => setPassword(e.target.value)} />
+            <TextField placeholder="Email Address" variant="outlined" type="email" onChange={e => setEmail(e.target.value)} />
+            <TextField placeholder="Password" variant="outlined" type="password" onChange={e => setPassword(e.target.value)} />
             <div className="authentication-cta">
                 <Button variant="contained" onClick={loginUser}>Log In</Button>
                 <Button variant="outlined" onClick={registerUser}>Register</Button>

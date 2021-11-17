@@ -33,6 +33,7 @@ class Coinbase {
     static addPendingTransaction(txn) {
         const mappedTxn = this.mapTransaction(txn);
         this.transactionStack.push(mappedTxn);
+        console.log('txn stack', this.transactionStack);
     }
 
     static async confirmTransaction(txn) {
@@ -97,6 +98,7 @@ class Coinbase {
                 giftCardId,
                 type
             })
+            console.log('checkout map', this.checkoutMap);
             return {
                 status: STATUS_CODES.OK,
                 data: checkout

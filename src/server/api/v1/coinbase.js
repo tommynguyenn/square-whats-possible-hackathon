@@ -42,9 +42,7 @@ router.post('/notification-webhook', async (req, res) => {
 				// Gift card ID
 				confirmedTransaction.data.giftCardId,
 				// Payment value
-				event.data.data.payments[0].value.local,
-				// User email
-				req.session.user.email
+				event.data.data.payments[0].value.local
 			]
 
 			const activity = await Square.createGiftCardActivity( ...args );

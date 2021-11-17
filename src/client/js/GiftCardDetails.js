@@ -8,8 +8,6 @@ export default function GiftCardDetails({ getGiftCards, selectedGiftCard }){
     const [error, setError] = React.useState(false);
     const [helperText, setHelperText] = React.useState('');
 
-    
-
     const validateAmount = (callback) => {
         if ( amount === 0 ) {
             setError(true);

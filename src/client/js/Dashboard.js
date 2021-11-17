@@ -15,8 +15,6 @@ export default function Dashboard({
     const getGCs = async () => {
 		await getGiftCards(user.email, setGiftCards)
 	}
-    
-    console.log('dashboard', user);
 
     return user ?
         <React.Fragment>

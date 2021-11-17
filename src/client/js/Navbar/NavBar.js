@@ -10,7 +10,7 @@ export default function Navbar({ getGiftCards, user }) {
 
     return(
         <nav className="navBarItems">
-            <h1 className="navbar-logo">The Circle Store</h1>
+            <h1 className="navbar-logo">Giftrr</h1>
             <ul className='navbar-menu'>
                 <CreateGiftCardMenu user={user} getGiftCards={getGiftCards} />
             </ul>

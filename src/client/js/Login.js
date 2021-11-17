@@ -17,7 +17,7 @@ export default function Login( { setUser, redirect } ) {
 
 	return (
         <div className="authentication">
-            <h1>Square: Build What's POS_sible </h1>
+            <h1 style={{ textAlign: 'center' }}>Giftrr</h1>
             <TextField placeholder="Email Address" variant="outlined" type="email" onChange={e => setEmail(e.target.value)} />
             <TextField placeholder="Password" variant="outlined" type="password" onChange={e => setPassword(e.target.value)} />
             <div className="authentication-cta">
